@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.scheduling.JobBuilder;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.scheduling.RecurringJobBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +48,24 @@ public class JobController {
                           )
         );
         return ResponseEntity.ok("Enqueued");
+    }
+
+    @Operation(description = "Schedule recurring job.")
+    @PostMapping(value = "/schedule")
+    public ResponseEntity<String> scheduleJob(@RequestBody JobHolder holder) {
+        Map<String, Object> metadata = Map.of("name", "James", "age", 1);
+
+        JobI jobClazz = applicationContext.getBean(holder.getClazz());
+        jobScheduler.createRecurrently(
+                RecurringJobBuilder.aRecurringJob()
+                                   .withId(jobClazz.getClass().getSimpleName())
+                                   .withAmountOfRetries(3)
+                                   .withCron(holder.getCron())
+                                   .withLabels("cron")
+                                   .withDetails(
+                                           () -> jobClazz.execute(JobContext.Null, metadata)
+                                   )
+        );
+        return ResponseEntity.ok("Scheduled");
     }
 }
