@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 import org.jobrunr.scheduling.cron.Cron;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public enum JobHolder {
     SimpleJob(SimpleJob.class, Cron.every5minutes());
-    private Class<? extends JobI> clazz;
-    private String cron;
+    private final Class<? extends JobI> clazz;
+    private final String cron;
 
     public String getJobId() {
         return this.clazz.getSimpleName();
