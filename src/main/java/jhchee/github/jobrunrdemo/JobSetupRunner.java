@@ -34,7 +34,7 @@ public class JobSetupRunner implements ApplicationRunner {
             JobI jobClazz = applicationContext.getBean(jobHolder.getClazz());
             jobScheduler.createRecurrently(
                     RecurringJobBuilder.aRecurringJob()
-                                       .withId(jobClazz.getClass().getSimpleName())
+                                       .withId(jobHolder.getJobId())
                                        .withAmountOfRetries(3)
                                        .withCron(jobHolder.getCron())
                                        .withLabels("cron")
