@@ -11,6 +11,7 @@ import org.jobrunr.scheduling.cron.Cron;
 @Getter
 public enum JobHolder {
     SimpleJob(SimpleJob.class, Cron.every15seconds()),
+    LongProcessingJob(LongProcessingJob.class, Cron.every5minutes()),
     ErrorJob(ErrorJob.class, Cron.every15seconds()),
     ReportJob(ReportJob.class, null);
     private final Class<? extends JobI> clazz;
